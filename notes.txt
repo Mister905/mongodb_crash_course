@@ -1,0 +1,109 @@
+Signed up for Atlas, installed Atlas CLI and the MongoDB Shell
+
+Run your connection string in your command line
+
+e.g.
+
+mongosh "mongodb+srv://cluster0.krlamsz.mongodb.net/myFirstDatabase" --apiVersion 1 --username jamesm
+
+
+** show dbs **
+
+Atlas atlas-92kbef-shard-0 [primary] myFirstDatabase> show dbs
+admin  336.00 KiB
+local    7.57 GiB
+
+
+** create or switch to db **
+
+Atlas atlas-92kbef-shard-0 [primary] myFirstDatabase> use animals
+switched to db animals
+
+
+** insert document into collection **
+
+db.mammals.insertOne({"type": "Elephant", "name": "Babar", "age": 21})
+
+
+** insert multtiple document into collection **
+
+db.mammals.insertMany([{"type": "Tiger", "name": "Shere Khan", "age": 8}, {"type": "Bear", "name": "Baloo", "age": 13}])
+
+
+
+** remove all documents within collection **
+
+db.mammals.deleteMany({})
+
+
+
+** query for all documents in collection **
+
+db.mammals.find()
+
+
+
+** query for one document in collection **
+
+db.mammals.findOne({ "_id": ObjectId("62d6cbc54707471abe4e743d") })
+
+
+** query for documents where condition **
+
+db.mammals.find({ "type": "elephant" })
+
+
+** query for documents where number attribute value is greater than value X ( Comparison Operators ) **
+
+db.mammals.find({ age: { $gt: 20 } }).pretty()
+
+
+
+** query for documents where attribute value is / is not included in list of args ( Comparison Operators ) **
+
+db.mammals.find({ type: { $in: ["elephant", "horse"] } }).pretty()
+
+db.mammals.find({ type: { $nin: ["elephant", "horse"] } }).pretty()
+
+
+Comparison Query Operators
+
+https://www.mongodb.com/docs/manual/reference/operator/query-comparison
+
+
+
+Logical Query Operators
+
+https://www.mongodb.com/docs/manual/reference/operator/query-logical/
+
+
+e.g.
+
+db.mammals.find({ $or: [{ age: { $lte: 20 } }, { age: { $gte: 50 } }] })
+
+
+db.mammals.find({ $and: [{ age: { $gt: 20 } }, { age: { $lt: 50 } }] })
+
+
+
+** updating data **
+
+db.mammals.updateOne({ _id: ObjectId("62d6cbc54707471abe4e743c") }, { $set: { age: 25, name: "James" } })
+
+
+** increment value for each document in collection **
+
+db.mammals.updateMany({}, { $inc: { age: 1 } })
+
+
+
+** upserting data ( i.e. create record if query returns no result ) **
+
+db.mammals.updateOne({ name: "James" }, { $set: { type: "snake", age: 2, weight: 2 } }, { upsert: true } ).pretty()
+
+
+** deleting data **
+
+db.mammals.deleteOne( { _id: ObjectId("62d6cbc54707471abe4e743c") } )
+
+db.mammals.deleteMany( { age: { $gte: 45 } } )
